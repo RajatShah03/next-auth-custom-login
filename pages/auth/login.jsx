@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { signIn } from "next-auth/react"
 import styles from '../../styles/Home.module.css'
 
 const LoginPage = () => {
@@ -13,8 +14,12 @@ const LoginPage = () => {
         setPassword(e.target.value)
     }
 
-    const handleFormSubmit = e => {
+    const handleFormSubmit = async e => {
         e.preventDefault()
+
+        const res = await signIn('credentials', { email, password })
+
+        console.log({res})
     }
 
     return (
