@@ -13,7 +13,7 @@ const nextAuthConfig = {
                             accessToken: 'valid access token',
                             data: {
                                 id: '1234',
-                                name: 'Firstname Lastname',
+                                name: 'John Doe',
                                 email: 'abc@test.com',
                                 role: 0
                             }
@@ -28,19 +28,24 @@ const nextAuthConfig = {
         }),
     ],
     callbacks: {
-        async jwt({ token, user, account, profile, isNewUser }) {
-            console.log({ token, user, account, profile, isNewUser })
+        async jwt({ token, user }) {
+            if(user) {
+                token.accessToken = user.accessToken
+                token.user = user.data
+            }
+
             return token
         },
         async session({ session, token, user }) {
-            console.log({ session, token, user })
+            session.accessToken = token.accessToken
+            session.user = token.user
+
             return session
         }
     },
     pages: {
         signIn: '/auth/login',
         error: '/auth/login',
-        newUser: '/'
     }
 }
 
